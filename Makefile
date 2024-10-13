@@ -23,7 +23,10 @@ cpu_governor:
 	cd /sys/devices/system/cpu;	\
     echo performance | sudo tee cpu*/cpufreq/scaling_governor
 
-fix: core_dump gpu_governor
+ptrace_scope:
+	sudo sysctl -w kernel.yama.ptrace_scope=0
+
+fix: core_dump gpu_governor ptrace_scope
 
 xpdf_install:
 	$(MAKE) -C $(DIR_XPDF) install
@@ -40,4 +43,4 @@ xpdf_all:
 xpdf_clean:
 	@$(MAKE) -C $(DIR_XPDF) clean
 
-.PHONY: help core_dump cpu_governor fix xpdf_install xpdf_examples xpdf_fuzzing xpdf_all xpdf_clean all clean test
+.PHONY: help core_dump cpu_governor ptrace_scope fix xpdf_install xpdf_examples xpdf_fuzzing xpdf_all xpdf_clean all clean test
