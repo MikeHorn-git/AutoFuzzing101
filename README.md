@@ -23,4 +23,8 @@ Targets:
   xpdf_all        Run the full install, examples, and fuzzing process.
   xpdf_clean      Clean up the xpdf build and examples.
   help            Display this help message.
-  ```
+```
+# Credits
+
+* [Antonio-Morales](https://github.com/antonio-morales)
+* [trustfoundry.net](https://trustfoundry.net/2020/01/22/introduction-to-triaging-fuzzer-generated-crashes/)

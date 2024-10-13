@@ -1,21 +1,45 @@
 CC = afl-clang-fast
 CXX = afl-clang-fast++
+GDB := gdb
+CFLAGS = -g -O0
+CXXFLAGS = -g -O0
+GDBFLAGS = -q -x
 LLVM_CONFIG = llvm-config-11
-INSTALL_DIR := $(shell pwd)/install
+
 EXAMPLES_DIR = $(shell pwd)/pdf_examples
+INSTALL_DIR := $(shell pwd)/install
 OUT_DIR = $(shell pwd)/out
 OUTPUT = $(shell pwd)/output
 SEED = 123
 
+POC := poc.gdb
+XPDF_URL = https://dl.xpdfreader.com/old/xpdf-3.02.tar.gz
+XPDF_ARCHIVE = xpdf-3.02.tar.gz
+XPDF_DIR = xpdf-3.02
+
+help:
+	@echo "Usage: make <target>"
+	@echo "Targets:"
+	@echo "  install     Download and install xpdf with debug symbols."
+	@echo "  examples    Download example PDF files."
+	@echo "  fuzzing     Run AFL fuzzing on pdftotext."
+	@echo "  all         Run install, examples, and fuzzing in sequence."
+	@echo "  poc         Run poc.gdb script."
+	@echo "  clean       Remove temporary files from the last build."
+	@echo "  distclean   Remove all build and installation files."
+	@echo "  help        Display this help message."
+
 install:
-	wget https://dl.xpdfreader.com/old/xpdf-3.02.tar.gz
-	tar -xvzf xpdf-3.02.tar.gz
-	cd xpdf-3.02;										\
-	export LLVM_CONFIG="$(LLVM_CONFIG)";				\
-	export CC="$(CC)";									\
-	export CXX="$(CXX)";								\
-	./configure --prefix="$(INSTALL_DIR)";				\
-	$(MAKE);											\
+	wget $(XPDF_URL)
+	tar -xvzf $(XPDF_ARCHIVE)
+	cd $(XPDF_DIR);							\
+	export LLVM_CONFIG="$(LLVM_CONFIG)";	\
+	export CC="$(CC)";						\
+	export CXX="$(CXX)";					\
+	export CFLAGS="$(CFLAGS)";				\
+	export CXXFLAGS="$(CXXFLAGS)";			\
+	./configure --prefix="$(INSTALL_DIR)";	\
+	$(MAKE);								\
 	$(MAKE) install
 
 examples:
@@ -30,7 +54,13 @@ fuzzing:
 
 all: install examples fuzzing
 
-clean:
-	@rm -rf xpdf-3.02.tar.gz xpdf-3.02 $(EXAMPLES_DIR) $(INSTALL_DIR) $(OUTPUT)
+poc:
+	@$(GDB) $(GDBFLAGS) $(POC)
 
-.PHONY: install examples fuzzing all clean test
+clean:
+	@rm -rf $(XPDF_ARCHIVE) $(XPDF_DIR) $(EXAMPLES_DIR)
+
+distclean:
+	@rm -rf $(XPDF_ARCHIVE) $(XPDF_DIR) $(EXAMPLES_DIR) $(INSTALL_DIR) $(OUT_DIR) $(OUTPUT)
+
+.PHONY: help install examples fuzzing all poc clean distclean test

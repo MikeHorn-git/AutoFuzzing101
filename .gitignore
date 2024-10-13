@@ -1,7 +1,9 @@
 # xpdf dirs
 install
+debug
 pdf_examples
 out
 output
 xpdf-3.02
 xpdf-3.02.tar.gz
+xpdf-3.02.tar.gz.1
