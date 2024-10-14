@@ -16,12 +16,10 @@ Usage: make <target>
 Targets:
   core_dump       Set core dump pattern for debugging.
   cpu_governor    Set CPU governor to performance mode.
-  fix             Run both core_dump and cpu_governor.
-  xpdf_install    Install xpdf in the fuzzing_xpdf directory.
-  xpdf_examples   Download sample PDF files for fuzzing.
-  xpdf_fuzzing    Start fuzzing xpdf with AFL++.
+  ptrace_scope    Set ptrace_scope to 0.
+  fix             Run both core_dump, cpu_governor and ptrace_scope.
   xpdf_all        Run the full install, examples, and fuzzing process.
-  xpdf_clean      Clean up the xpdf build and examples.
+  xpdf_disctlean  Remove all build and installation files.
   help            Display this help message.
 ```
 # Credits
