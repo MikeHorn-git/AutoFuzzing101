@@ -1,6 +1,7 @@
 PWD := $(shell pwd)
-:x
-:x
+
+SU := sudo
+
 DIR_XPDF = ./fuzzing_xpdf
 
 .DEFAULT_GOAL := help
@@ -21,7 +22,7 @@ core_dump:
 
 cpu_governor:
 	cd /sys/devices/system/cpu;	\
-	echo performance | sudo tee cpu*/cpufreq/scaling_governor
+	echo performance | $(SU) tee cpu*/cpufreq/scaling_governor
 
 ptrace_scope:
 	$(SU) sysctl -w kernel.yama.ptrace_scope=0
